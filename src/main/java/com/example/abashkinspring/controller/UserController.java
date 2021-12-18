@@ -2,6 +2,7 @@ package com.example.abashkinspring.controller;
 
 import com.example.abashkinspring.entity.UserEntity;
 import com.example.abashkinspring.exception.UserAlreadyExistException;
+import com.example.abashkinspring.exception.UserNotFoundException;
 import com.example.abashkinspring.repository.UserRepo;
 import com.example.abashkinspring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,11 @@ public class UserController {
 
 
     @GetMapping//Указываем что это get запрос
-    public ResponseEntity getUsers(){
+    public ResponseEntity getOneUser(@RequestParam Long id){
             try {
-                return ResponseEntity.ok("Сервер работает!");
+                return ResponseEntity.ok(userService.getOne(id));
+            }catch (UserNotFoundException e){
+                return ResponseEntity.badRequest().body(e.getMessage());
             }catch (Exception e){
                 return ResponseEntity.badRequest().body("Произошла ошибка");
             }
