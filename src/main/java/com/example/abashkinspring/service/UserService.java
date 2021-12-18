@@ -3,6 +3,7 @@ package com.example.abashkinspring.service;
 import com.example.abashkinspring.entity.UserEntity;
 import com.example.abashkinspring.exception.UserAlreadyExistException;
 import com.example.abashkinspring.exception.UserNotFoundException;
+import com.example.abashkinspring.model.User;
 import com.example.abashkinspring.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,12 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public UserEntity getOne(Long id) throws UserNotFoundException {
+    public User getOne(Long id) throws UserNotFoundException {
         UserEntity user = userRepo.findById(id).get();
         if(user==null){
             throw new UserNotFoundException("Пользователь не найден");
         }
-        return user;
+        return User.toModel(user);
     }
 
 }
