@@ -1,7 +1,9 @@
 package com.example.abashkinspring.controller;
 
 import com.example.abashkinspring.entity.UserEntity;
+import com.example.abashkinspring.exception.UserAlreadyExistException;
 import com.example.abashkinspring.repository.UserRepo;
+import com.example.abashkinspring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +12,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users") //Запросы которые будет обрабатывать этот контроллер должны начинаться с /users
 public class UserController {
 
+    @Autowired//Иницилизация репозитория
+    private UserService userService;
+
+
     @PostMapping
     public ResponseEntity registration (@RequestBody UserEntity user){
         try {
-            if (userRepo.findByUsername(user.getUsername()) !=null){
-                return ResponseEntity.badRequest().body("Пользователь с таким именем уже существует");
-            }
-            userRepo.save(user);
+            userService.registration(user);
             return ResponseEntity.ok("Пользователь успешно сохранен!");
+        }catch (UserAlreadyExistException e){//Отлавливаем созданную ошибку в UserService
+            return ResponseEntity.badRequest().body(e.getMessage());
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Произошла ошибка");
         }
