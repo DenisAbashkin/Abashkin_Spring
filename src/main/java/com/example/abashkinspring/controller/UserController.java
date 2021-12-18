@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users") //Запросы которые будет обрабатывать этот контроллер должны начинаться с /users
 public class UserController {
 
-    @Autowired//Иницилизация репозитория
-    private UserRepo userRepo;
-
     @PostMapping
     public ResponseEntity registration (@RequestBody UserEntity user){
         try {
